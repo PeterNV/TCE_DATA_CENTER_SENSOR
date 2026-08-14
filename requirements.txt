@@ -1,0 +1,7 @@
+Django>=4.2,<5.0
+pymongo
+paho-mqtt
+plotly
+matplotlib
+pytz
+requests

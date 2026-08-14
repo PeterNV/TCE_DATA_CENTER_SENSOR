@@ -1,0 +1,1027 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{% static 'TCE_DATA_CENTER_LOGO_ICON.jpg'%}" sizes="42x42" type="image/png">
+
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
+    <title>TCE DATA CENTER</title>
+    <style>
+        :root{
+        --bg: #0f1724; /* dark background */
+      
+        --muted: #9aa4b2;
+    
+    
+        --radius: 14px;
+        --max-width: 1100px;
+      }
+      body{
+        background-image: url("{% static 'BackgroundTCE.jpg'%}");        
+      }
+      
+      .butnav{
+        background:transparent;
+        border:0;
+        padding:10px 14px;
+        border-radius:999px;
+        color:var(--muted);
+        font-weight:800;
+        cursor:pointer;
+        transition:all .18s ease; 
+        font-size:12px;
+       
+      }
+
+      .butnav:hover{
+        background:rgba(255,255,255,0.03); 
+        color:#fff; 
+        transform:translateY(-2px)
+      }
+
+      nav{
+       width:100%;
+        max-width:var(--max-width);
+        margin:18px auto;
+        padding:12px 16px;
+        display:flex;
+        gap:12px;
+        align-items:center;
+        
+        background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+        border-radius:12px;
+        backdrop-filter: blur(6px);
+        box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+        
+      }
+
+
+      #TelaInicio{
+        width:100%;
+        max-width:1100px;
+        margin:18px auto;
+        padding:72px 36px;     
+        align-items:center;
+        justify-content:space-between;
+        background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+        border-radius:12px;
+        backdrop-filter: blur(6px);
+        box-shadow: 0 6px 18px rgba(2,6,23,0.6); 
+      }
+
+      #bemvindo{
+        color: white;
+        font-size: 70px;
+        text-align: center;
+        border-bottom: 2px solid white;
+      }
+     
+      
+        #medidores{
+            display:none; /* functionality preserved; toggled by JS */
+            margin:18px auto;
+            padding:18px;
+            border-radius:12px;
+            
+            width:100%;
+            max-width:1100px;
+            box-shadow:0 10px 30px rgba(2,6,23,0.6);
+            align-items: center;
+            text-align: center;
+            
+        }
+        #medidoresDois{
+            display:none; /* functionality preserved; toggled by JS */
+            margin:18px auto;
+            padding:18px;
+            border-radius:12px;
+            
+            width:100%;
+            max-width:1100px;
+            box-shadow:0 10px 30px rgba(2,6,23,0.6);
+            align-items: center;
+            text-align: center;
+            
+        }
+        .MedidorEM{
+              fill:none;
+              border-radius: 50%;  
+              stroke-width:12;
+              stroke-linecap: square;
+              stroke-dasharray:440;
+              stroke-dashoffset:0;
+              stroke:rgb(63, 63, 63);
+             
+              filter: blur(5px);
+              filter: brightness(0.5);
+              filter: drop-shadow(2px 2px 2px black);
+              scale: 0.75;
+          }
+          .MedidorEM2{
+              fill:none;
+              border-radius: 50%;  
+              stroke-width:7;
+              stroke-linecap: square;
+              stroke-dasharray:440px;
+              stroke-dashoffset:-440px;
+              stroke:white;
+              scale: 0.75;
+              filter: blur(15px);
+              filter: brightness(3.5);
+          }
+          
+            .MedidorV{
+                
+                position: relative;
+                font-size: 20px;
+                font-weight: bold;
+                color: white;
+                filter: drop-shadow(1px 1px 1px black);
+                
+                bottom: 112px;
+                left: 23px;
+            }
+            
+
+            
+            
+            #TextoSobreProjetoEchos{
+              font-weight: 600;
+              color: rgb(131, 131, 131);
+              font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            }
+            #EchosLista{
+              font-weight: 600;
+              color: rgb(131, 131, 131);
+              font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            }
+            #DataValida{
+              width:100%;
+                max-width:var(--max-width);
+                margin:18px auto;
+                padding:12px 16px;
+                display:flex;
+                gap:12px;
+                align-items:center;
+                
+                background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+                border-radius:12px;
+                backdrop-filter: blur(6px);
+                box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+                display: none;
+                text-align: center;
+                height: 525px;
+            }
+            #DataValidaDois{
+              width:100%;
+                max-width:var(--max-width);
+                margin:18px auto;
+                padding:12px 16px;
+                display:flex;
+                gap:12px;
+                align-items:center;
+                
+                background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+                border-radius:12px;
+                backdrop-filter: blur(6px);
+                box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+                display: none;
+                text-align: center;
+                height: 525px;
+            }
+            #ConfData{
+              border-radius: 25em;
+              position: relative;
+              width: 450px;
+              height: 45px;
+              background-image: -webkit-linear-gradient(-45deg,white,snow);
+              border: 5px solid white;
+              top: 145px;
+              opacity: 0.5;
+              color: gray;
+              font-weight: bold;
+            }
+            #ConfDataDois{
+              border-radius: 25em;
+              position: relative;
+              width: 450px;
+              height: 45px;
+              background-image: -webkit-linear-gradient(-45deg,white,snow);
+              border: 5px solid white;
+              top: 145px;
+              opacity: 0.5;
+              color: gray;
+              font-weight: bold;
+            }
+            #CanceData{
+              color: gray;
+              border: 3px solid gray;
+              border-radius: 50%;
+              height: 55px;
+              width: 55px;
+            }
+            #FechaDef{
+              color: gray;
+              border: 3px solid gray;
+              border-radius: 50%;
+              height: 55px;
+              width: 55px;
+            }
+            #FechaMG{
+              color: gray;
+              border: 3px solid gray;
+              border-radius: 50%;
+              height: 55px;
+              width: 55px;
+            }
+            #FechaMed{
+              color: gray;
+              border: 3px solid white;
+              border-radius: 50%;
+              height: 115px;
+              width: 115px;
+              background-color: white;
+            }
+            #FechaMedDois{
+              color: gray;
+              border: 3px solid white;
+              border-radius: 50%;
+              height: 115px;
+              width: 115px;
+              background-color: white;
+            }
+            #PEF{
+              color: gray;
+            }
+            #MG{
+              color: gray;
+            }
+            #MED{
+              color: white;
+            }
+            #SUDPVVM{
+              color: gray;
+            }
+
+            #DataSelec{
+              background-color: transparent;
+              border-color:  transparent;
+              font-size: 35px;
+              font-weight: bold;
+              position: relative;
+              top: 55px;
+            }
+            
+            #ErroData{
+              margin-left: auto;
+                margin-right: auto;
+                text-align: center;
+                background-color: gray;
+                border: 4px solid black;
+                height: 400px;
+                width: 600px;
+                border-radius: 5%; 
+            }
+           
+            #NavLogo{height:54px;cursor:pointer;border-radius:8px}
+            #SlecData{
+              text-align: center;
+              height: 65px;
+              width: 215px;
+              color: black;
+              background-color: rgb(199, 199, 199);
+              margin-left: auto;
+              margin-right: auto;
+              font-weight: bold;
+              border-color: transparent;
+              border-radius: 25em;
+            }
+            #SlecDataDois{
+              text-align: center;
+              height: 65px;
+              width: 215px;
+              color: black;
+              background-color: rgb(199, 199, 199);
+              margin-left: auto;
+              margin-right: auto;
+              font-weight: bold;
+              border-color: transparent;
+              border-radius: 25em;
+            }
+            .navbar {
+              max-width:var(--max-width);
+              margin:18px auto;
+              padding:18px;
+              border-radius:12px;
+              background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+              display:flex;
+              justify-content:space-between;align-items:center
+            }
+
+            
+            .MidiaSocial{
+                display:inline-flex;
+                align-items:center;
+                justify-content:center;
+                height:53px;
+                width:53px;
+                border-radius:999px;
+                background:#041025;
+                border:1px solid rgba(255,255,255,0.03);
+                color:#fff;
+                font-size:25px;
+                text-decoration:none
+            }
+            .MidiaSocial + .MidiaSocial{
+                margin-left:10px}
+            .CirculoInterno{
+              height: 35px;
+              width: 35px;
+              border-radius:50% ;
+              background-color: black;
+              position: relative;
+              top: 38px;
+              border: 2px solid gray;
+            }
+        
+        #TheDataInput{
+          background-color: rgb(194, 194, 194);
+          color: black;
+          font-weight: bold;
+          border-radius: 0%;
+          border-top-color: transparent;
+          border-left-color: transparent;
+          border-right-color: transparent;
+          text-align: center;
+        }
+         #TheDataInputDois{
+          background-color: rgb(194, 194, 194);
+          color: black;
+          font-weight: bold;
+          border-radius: 0%;
+          border-top-color: transparent;
+          border-left-color: transparent;
+          border-right-color: transparent;
+          text-align: center;
+        }
+        #DI{
+          scale: 0.88;
+        }
+         
+        .meters-grid{
+            display:grid;
+            grid-template-columns:
+            repeat(2,1fr);
+            gap:2px;
+            padding: 10px 12px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+           
+        .meter{
+          background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+          border-radius:12px;
+          padding:12px;
+          display:flex;
+          flex-direction:column;
+          align-items:center;
+          gap:10px;
+          min-height:160px;
+          position:relative;
+          margin-left: auto;
+          margin-right: auto;
+          text-align: center;
+      }
+        .nav-actions{display:flex;gap:8px;align-items:center}
+         @media (max-width: 900px){
+      
+        nav{padding:12px}
+        #NavLogo{height:48px}
+      }
+      @media (max-width: 520px){
+        
+        nav{flex-direction:column;gap:8px;align-items:flex-start}
+        .nav-actions{width:100%;display:flex;overflow:auto;gap:8px}
+        .brand-title{font-size:16px}
+      
+         #DataValida{padding:14px}
+         #DataValidaDois{padding:14px}
+      }
+      .nav-left{display:flex;align-items:center;gap:12px}
+      .nav-actions{display:flex;gap:8px;align-items:center}
+      .text-muted{color:var(--muted)}
+      .brand-title{font-weight:700;font-size:18px;color:#f8fafc}
+      .LogoBottom{
+        width: 349px;
+        height: 80px;
+        border-radius: 1em;
+        background-color: white;
+        border: 5px solid white;
+      }
+      #CanceData{
+                color: #777;
+                border: 5px solid white;
+                border-radius: 50%;
+                height: 50px;
+                width: 50px;
+                font-size: 20px;
+                font-weight: bold;
+                cursor: pointer;
+                font-family: Arial black;
+                background-color: white;
+                position: relative;
+                bottom: 5px;
+        }
+      .MedNome{
+        color: white;
+        text-align: center;
+      }
+      #ResumoSite{
+        color: white;
+        font-weight: bold;
+        text-align: justify;
+      }
+    </style>
+  </head>
+  <body >
+    <nav>
+        <div class="nav-left">
+          <img id="NavLogo" onclick="MenuInicial()" src="{% static 'TCE_DATA_CENTER_LOGO_2.jpg' %}">
+        <div>
+          <div class="brand-title">TCE PE DATA CENTER</div>
+          <div class="text-muted" style="font-size:12px">Estação de monitoramento IoT</div>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+       
+        <button class="butnav" id="butgraf" onclick="VerMedidores()">MEDIDORES (NC)</button>
+        <button class="butnav" id="butdajr" onclick="MostrarGraficosJR()">DADOS JÁ REGISTRADOS (NC)</button>
+        <button class="butnav" id="butgrafrl" onclick="VerMedidoresDois()">MEDIDORES (RL)</button>
+        <button class="butnav" id="butdajrrl" onclick="MostrarGraficosJRDois()">DADOS JÁ REGISTRADOS (RL)</button>
+      </div>
+      
+      
+    </nav>
+    <section class="container" id="medidores" >
+      <div class="meter">
+          <h3 style="color:white">MEDIDORES (NC)</h3>
+          <button id="FechaMed" type="reset" onclick="FechaOMed()" class="butnav" >Fechar</button>
+        </div><br>
+      <div class="meters-grid" >
+        
+            <div class="meter">
+              <br><br>
+              <h3 class="MedNome">TEMPERATURA (ºC)</h3>
+              <svg>
+                    <circle id="CirculoDaTemperaturaUm" class="MedidorEM" cx="225" cy="85" r="70"></circle>
+                    <circle id="CirculoDaTemperaturaDois" class="MedidorEM2" cx="225" cy="85" r="70"></circle>
+                </svg>
+              <label class="MedidorV" id="temperatura">25ºC</label>
+              
+            </div>
+
+            <div class="meter">
+              <br><br>
+              <h3 class="MedNome">PONTO DE ORVALHO (ºC)</h3>
+              <svg>
+                    <circle id="CirculoDoPDOUm" class="MedidorEM" cx="225" cy="85" r="70"></circle>
+                    <circle id="CirculoDaPDODois" class="MedidorEM2" cx="225" cy="85" r="70"></circle>
+                </svg>
+              <label class="MedidorV" id="pdo">25ºC</label>
+              
+            </div>
+
+
+            <div class="meter">
+              <br><br>
+              <h3 class="MedNome">UMIDADE (%)</h3>
+                <svg>
+                    <circle id="CirculoDaUmidadeUm" class="MedidorEM" cx="225" cy="85" r="70">30</circle>
+                    <circle id="CirculoDaUmidadeDois" class="MedidorEM2" cx="225" cy="85" r="70">30</circle>
+                </svg>
+              <Label class="MedidorV" id="umidade">100%</Label>
+            </div>
+        </div>
+    </section>
+  
+
+    <section class="container" id="medidoresDois" >
+      <div class="meter">
+          <h3 style="color:white">MEDIDORES (RL)</h3>
+          <button id="FechaMedDois" type="reset" onclick="FechaOMedDois()" class="butnav" >Fechar</button>
+        </div><br>
+      <div class="meters-grid" >
+        
+            <div class="meter">
+              <br><br>
+              <h3 class="MedNome">TEMPERATURA (ºC)</h3>
+              <svg>
+                    <circle id="CirculoDaTemperaturaUmDois" class="MedidorEM" cx="225" cy="85" r="70"></circle>
+                    <circle id="CirculoDaTemperaturaDoisDois" class="MedidorEM2" cx="225" cy="85" r="70"></circle>
+                </svg>
+              <label class="MedidorV" id="temperaturaDois">25ºC</label>
+              
+            </div>
+
+            <div class="meter">
+              <br><br>
+              <h3 class="MedNome">PONTO DE ORVALHO (ºC)</h3>
+              <svg>
+                    <circle id="CirculoDoPDOUmDois" class="MedidorEM" cx="225" cy="85" r="70"></circle>
+                    <circle id="CirculoDaPDODoisDois" class="MedidorEM2" cx="225" cy="85" r="70"></circle>
+                </svg>
+              <label class="MedidorV" id="pdoDois">25ºC</label>
+              
+            </div>
+
+
+            <div class="meter">
+              <br><br>
+              <h3 class="MedNome">UMIDADE (%)</h3>
+                <svg>
+                    <circle id="CirculoDaUmidadeUmDois" class="MedidorEM" cx="225" cy="85" r="70">30</circle>
+                    <circle id="CirculoDaUmidadeDoisDois" class="MedidorEM2" cx="225" cy="85" r="70">30</circle>
+                </svg>
+              <Label class="MedidorV" id="umidadeDois">100%</Label>
+            </div>
+        </div>
+    </section>
+  
+    <div class="container"  >
+      <div id="DataValida">
+        <br>
+        <form action="{% url 'dados_estacao' %}" method="get">
+          <fieldset>
+          {% csrf_token %}
+          <h1 id="SUDPVVM"><button id="CanceData" type="reset" onclick="CancelaData()">X</button> SELECIONE UMA DATA (NC): </h1><br>
+          
+            <select name="datadados" id="SlecData" onclick="DataInvalida()"  >
+              
+            
+              {%if Data == "Dados não encontrados"%}
+              <option class="datas" id="DatasCompleta">{{Data}}</option>
+              {% else %}
+              <option class="datasDois">SELECIONE UMA DATA</option>
+              {% for x in Data %}
+              
+              <option class="datas" id="DatasCompleta">{{x}}</option>
+              
+              {% endfor %}
+              {% endif %}
+            </select><br><br>
+            <input id="TheDataInput"  type="text" onkeypress="DataInput()" onkeyup="DataInput()" onkeydown="DataInput()" placeholder="DD/MM/AAAA"><br>
+            <label id="DI"></label>
+           <button id="ConfData" type="submit" disabled onclick="LerGraficos()">CONFIRMAR</button><br><br>
+          </fieldset>
+        </form><br>
+      </div>
+    </div>
+
+
+
+    <div class="container"  >
+      <div id="DataValidaDois">
+        <br>
+        <form action="{% url 'dados_estacao_dois' %}" method="get">
+          <fieldset>
+          {% csrf_token %}
+          <h1 id="SUDPVVM"><button id="CanceData" type="reset" onclick="CancelaDataDois()">X</button> SELECIONE UMA DATA (RL): </h1><br>
+          
+            <select name="datadadosDois" id="SlecDataDois" onclick="DataInvalidaDois()"  >
+              
+              {%if DataDois == "Dados não encontrados"%}
+              <option class="datasDois" id="DatasCompletaDois">{{DataDois}}</option>
+              {% else %}
+              <option class="datasDois">SELECIONE UMA DATA</option>
+              {% for x in DataDois %}
+              
+              <option class="datasDois" id="DatasCompletaDois">{{x}}</option>
+              
+              {% endfor %}
+              {% endif %}
+            </select><br><br>
+            <input id="TheDataInputDois"  type="text" onkeypress="DataInputDois()" onkeyup="DataInputDois()" onkeydown="DataInputDois()" placeholder="DD/MM/AAAA"><br>
+            <label id="DIDois"></label>
+           <button id="ConfDataDois" type="submit" disabled onclick="LerGraficos()">CONFIRMAR</button><br><br>
+          </fieldset>
+        </form><br>
+      </div>
+    </div>
+
+    <div class="container" id="TelaInicio">
+      <h1 id="bemvindo">Bem-vindo</h1>  <br>
+      <p id="ResumoSite">Aqui estão disponíveis valores já registrados da temperatura(ºC) e da umidade(%) do Data Center do TCE de Pernambuco, incluindo também medidores que permite você acompanhar os dados atuais em tempo real.</p>
+    </div><br>
+    <nav class="navbar">
+      <a href="https://tcepe.tc.br/internet/" target="_blank" class="active"><img class="LogoBottom" src="{% static 'LOGO_NOVA_DO_TCE.jpeg'%}"></a>
+       <div id="TodasAsRedesSociais">
+        <a href="https://www.instagram.com/tce_pe/" target="_blank" class="MidiaSocial"><i class="fa fa-instagram"></i></a>
+        <a href="https://www.facebook.com/tcepernambuco/" target="_blank" class="MidiaSocial"><i class="fa fa-facebook-f"></i></a>
+        <a href="https://www.instagram.com/paecm6/" target="_blank" class="MidiaSocial"><i class="fa fa-instagram"></i></a>
+      </div>
+      
+    </nav>
+    
+  
+   <script>
+    
+   function DataInput(){
+    var seleData = document.getElementsByClassName("datas");
+    var re = document.getElementById("TheDataInput").value;
+    for(var i =65; i < 91;i++){
+      
+      String.fromCharCode(i);
+      console.log(String.fromCharCode(i));
+      if(document.getElementById("TheDataInput").value == String.fromCharCode(i)){
+        document.getElementById("TheDataInput").value = null;
+      }
+     
+    }
+    for(var i =97; i < 123;i++){
+      
+      String.fromCharCode(i);
+      console.log(String.fromCharCode(i));
+    
+      if(document.getElementById("TheDataInput").value == String.fromCharCode(i)){
+        document.getElementById("TheDataInput").value = null;
+      } 
+    }
+    for(var i =32; i < 47;i++){
+      
+      String.fromCharCode(i);
+      console.log(String.fromCharCode(i));
+    
+      if(document.getElementById("TheDataInput").value == String.fromCharCode(i)){
+        document.getElementById("TheDataInput").value = null;
+      } 
+    }
+    for(var i =58; i < 65;i++){
+      
+      String.fromCharCode(i);
+      console.log(String.fromCharCode(i));
+    
+      if(document.getElementById("TheDataInput").value == String.fromCharCode(i)){
+        document.getElementById("TheDataInput").value = null;
+      } 
+    }
+    for(var i =91; i < 97;i++){
+      
+      String.fromCharCode(i);
+      console.log(String.fromCharCode(i));
+    
+      if(document.getElementById("TheDataInput").value == String.fromCharCode(i)){
+        document.getElementById("TheDataInput").value = null;
+      } 
+    }
+    for(var i =123; i < 127;i++){
+      
+      String.fromCharCode(i);
+      console.log(String.fromCharCode(i));
+    
+      if(document.getElementById("TheDataInput").value == String.fromCharCode(i)){
+        document.getElementById("TheDataInput").value = null;
+      } 
+    }
+    if(document.getElementById("TheDataInput").value[0] == "/"){
+      document.getElementById("TheDataInput").value = null;
+    }
+    if(document.getElementById("TheDataInput").value[0] == "´"){
+      document.getElementById("TheDataInput").value = null;
+    }
+    const datah = new Date();
+    var now = datah.getDate()+"/"+parseInt(datah.getMonth()+1)+"/"+datah.getFullYear();
+    if(re == now){
+        document.getElementById("DI").innerHTML = "Não é permitido selecionar a data de hoje, por favor selecione outra data, ou tente novamente amanhã.";
+        document.getElementById("ConfData").disabled = true;
+        document.getElementById("ConfData").style.opacity = "0.5";
+    }else{
+      document.getElementById("DI").innerHTML = "";
+    }
+    var selc = false;
+    for(var i = 0; i < seleData.length;i++){
+      
+      if(re == seleData[i].innerHTML ){
+        console.log("Data encontrada.");
+        seleData[i].selected = true;
+        seleData[0].selected = false;
+      }
+      if(re == ""){
+        seleData[0].selected = true;
+      }
+      if(seleData[0].selected == true){
+        document.getElementById("ConfData").disabled = true;
+          document.getElementById("ConfData").style.opacity = "0.5";
+          
+      }else{
+        document.getElementById("ConfData").disabled = false;
+          document.getElementById("ConfData").style.opacity = "1";
+      }
+    }
+   } 
+
+
+   function DataInputDois(){
+    var seleData = document.getElementsByClassName("datasDois");
+    var re = document.getElementById("TheDataInputDois").value;
+    for(var i =65; i < 91;i++){
+      
+      String.fromCharCode(i);
+      console.log(String.fromCharCode(i));
+      if(document.getElementById("TheDataInputDois").value == String.fromCharCode(i)){
+        document.getElementById("TheDataInputDois").value = null;
+      }
+     
+    }
+    for(var i =97; i < 123;i++){
+      
+      String.fromCharCode(i);
+      console.log(String.fromCharCode(i));
+    
+      if(document.getElementById("TheDataInputDois").value == String.fromCharCode(i)){
+        document.getElementById("TheDataInputDois").value = null;
+      } 
+    }
+    for(var i =32; i < 47;i++){
+      
+      String.fromCharCode(i);
+      console.log(String.fromCharCode(i));
+    
+      if(document.getElementById("TheDataInputDois").value == String.fromCharCode(i)){
+        document.getElementById("TheDataInputDois").value = null;
+      } 
+    }
+    for(var i =58; i < 65;i++){
+      
+      String.fromCharCode(i);
+      console.log(String.fromCharCode(i));
+    
+      if(document.getElementById("TheDataInputDois").value == String.fromCharCode(i)){
+        document.getElementById("TheDataInputDois").value = null;
+      } 
+    }
+    for(var i =91; i < 97;i++){
+      
+      String.fromCharCode(i);
+      console.log(String.fromCharCode(i));
+    
+      if(document.getElementById("TheDataInputDois").value == String.fromCharCode(i)){
+        document.getElementById("TheDataInputDois").value = null;
+      } 
+    }
+    for(var i =123; i < 127;i++){
+      
+      String.fromCharCode(i);
+      console.log(String.fromCharCode(i));
+    
+      if(document.getElementById("TheDataInputDois").value == String.fromCharCode(i)){
+        document.getElementById("TheDataInputDois").value = null;
+      } 
+    }
+    if(document.getElementById("TheDataInputDois").value[0] == "/"){
+      document.getElementById("TheDataInputDois").value = null;
+    }
+    if(document.getElementById("TheDataInputDois").value[0] == "´"){
+      document.getElementById("TheDataInputDois").value = null;
+    }
+    const datah = new Date();
+    var now = datah.getDate()+"/"+parseInt(datah.getMonth()+1)+"/"+datah.getFullYear();
+    if(re == now){
+        document.getElementById("DIDois").innerHTML = "Não é permitido selecionar a data de hoje, por favor selecione outra data, ou tente novamente amanhã.";
+        document.getElementById("ConfDataDois").disabled = true;
+        document.getElementById("ConfDataDois").style.opacity = "0.5";
+    }else{
+      document.getElementById("DIDois").innerHTML = "";
+    }
+    var selc = false;
+    for(var i = 0; i < seleData.length;i++){
+      
+      if(re == seleData[i].innerHTML ){
+        console.log("Data encontrada.");
+        seleData[i].selected = true;
+        seleData[0].selected = false;
+      }
+      if(re == ""){
+        seleData[0].selected = true;
+      }
+      if(seleData[0].selected == true){
+        document.getElementById("ConfDataDois").disabled = true;
+          document.getElementById("ConfDataDois").style.opacity = "0.5";
+          
+      }else{
+        document.getElementById("ConfDataDois").disabled = false;
+          document.getElementById("ConfDataDois").style.opacity = "1";
+      }
+    }
+   }
+
+   function DataInvalida(){
+    
+    const datah = new Date();
+    var now = datah.getDate()+"/"+parseInt(datah.getMonth()+1)+"/"+datah.getFullYear();
+    var selecData = document.getElementsByClassName("datas");
+    console.log(now);
+    
+    for(var i = 0; i < selecData.length;i++){
+      if(selecData[0].selected == true){
+        document.getElementById("TheDataInput").value = "";
+        document.getElementById("DI").innerHTML = "";
+        document.getElementById("ConfData").disabled = true;
+        document.getElementById("ConfData").style.opacity = "0.5";
+      }
+      if(selecData[i].selected == true && selecData[i].innerHTML == now){
+        document.getElementById("DI").innerHTML = "Não é permitido selecionar a data de hoje, por favor selecione outra data, ou tente novamente amanhã.";
+        document.getElementById("ConfData").disabled = true;
+        document.getElementById("ConfData").style.opacity = "0.5";
+      }
+      if(selecData[i].selected == true && selecData[i].innerHTML != now){
+        document.getElementById("DI").innerHTML = "";
+        document.getElementById("ConfData").disabled = false;
+        document.getElementById("ConfData").style.opacity = "1";
+      }
+    }
+    
+   } 
+
+
+   function DataInvalidaDois(){
+    
+    const datah = new Date();
+    var now = datah.getDate()+"/"+parseInt(datah.getMonth()+1)+"/"+datah.getFullYear();
+    var selecData = document.getElementsByClassName("datasDois");
+    console.log(now);
+    
+    for(var i = 0; i < selecData.length;i++){
+      if(selecData[0].selected == true){
+        document.getElementById("TheDataInputDois").value = "";
+        document.getElementById("DIDois").innerHTML = "";
+        document.getElementById("ConfDataDois").disabled = true;
+        document.getElementById("ConfDataDois").style.opacity = "0.5";
+      }
+      if(selecData[i].selected == true && selecData[i].innerHTML == now){
+        document.getElementById("DIDois").innerHTML = "Não é permitido selecionar a data de hoje, por favor selecione outra data, ou tente novamente amanhã.";
+        document.getElementById("ConfDataDois").disabled = true;
+        document.getElementById("ConfDataDois").style.opacity = "0.5";
+      }
+      if(selecData[i].selected == true && selecData[i].innerHTML != now){
+        document.getElementById("DIDois").innerHTML = "";
+        document.getElementById("ConfDataDois").disabled = false;
+        document.getElementById("ConfDataDois").style.opacity = "1";
+      }
+    }
+    
+   } 
+  
+
+   function MostrarGraficosJR(){
+    document.getElementById("DataValida").style.display = "block";
+    document.getElementById("DataValidaDois").style.display = "none";
+    document.getElementById("TelaInicio").style.display = "none";
+    document.getElementById("medidores").style.display = "none";
+    document.getElementById("medidoresDois").style.display = "none";
+
+   }
+   function MostrarGraficosJRDois(){
+    document.getElementById("DataValida").style.display = "none";
+    document.getElementById("DataValidaDois").style.display = "block";
+    document.getElementById("TelaInicio").style.display = "none";
+    document.getElementById("medidores").style.display = "none";
+    document.getElementById("medidoresDois").style.display = "none";
+
+   }
+   function VerMedidores(){
+    document.getElementById("DataValida").style.display = "none";
+    document.getElementById("TelaInicio").style.display = "none";
+    document.getElementById("DataValidaDois").style.display = "none";
+    document.getElementById("medidores").style.display = "flex";
+    document.getElementById("medidoresDois").style.display = "none";
+   }
+   function VerMedidoresDois(){
+    document.getElementById("DataValida").style.display = "none";
+    document.getElementById("TelaInicio").style.display = "none";
+    document.getElementById("medidores").style.display = "none";
+    document.getElementById("DataValidaDois").style.display = "none";
+    document.getElementById("medidoresDois").style.display = "flex";
+  
+   }
+  function CancelaData(){
+    document.getElementById("DI").innerHTML = "";
+    document.getElementById("DataValida").style.display = "none";
+    document.getElementById("TelaInicio").style.display = "block";
+    document.getElementById("medidores").style.display = "none";
+     document.getElementById("medidoresDois").style.display = "none";
+    document.getElementById("DataValidaDois").style.display = "none";
+   
+   }
+
+   function CancelaDataDois(){
+    document.getElementById("DI").innerHTML = "";
+    document.getElementById("DataValida").style.display = "none";
+    document.getElementById("DataValidaDois").style.display = "none";
+    document.getElementById("TelaInicio").style.display = "block";
+    document.getElementById("medidores").style.display = "none";
+    document.getElementById("medidoresDois").style.display = "none";
+   }
+
+   function FechaADef(){
+    document.getElementById("DataValida").style.display = "none";
+    document.getElementById("TelaInicio").style.display = "block";
+    document.getElementById("medidores").style.display = "none";
+    
+
+   }
+   function FechaOMed(){
+    document.getElementById("DataValida").style.display = "none";
+    document.getElementById("TelaInicio").style.display = "block";
+    document.getElementById("medidores").style.display = "none";
+    
+
+   }
+   function FechaOMedDois(){
+    document.getElementById("DataValida").style.display = "none";
+    document.getElementById("TelaInicio").style.display = "block";
+    document.getElementById("medidoresDois").style.display = "none";
+    
+
+   }
+   function FechaOMG(){
+    document.getElementById("DataValida").style.display = "none";
+    document.getElementById("TelaInicio").style.display = "block";
+    document.getElementById("medidores").style.display = "none";
+    document.getElementById("medidoresDois").style.display = "none";
+    document.getElementById("DataValidaDois").style.display = "none";
+
+   }
+  
+   function MenuInicial(){
+      document.getElementById("TelaInicio").style.display = "block";
+
+      
+      document.getElementById("medidores").style.display = "none";
+      document.getElementById("DataValida").style.display = "none";
+      document.getElementById("medidoresDois").style.display = "none";
+      document.getElementById("DataValidaDois").style.display = "none";
+    }
+   
+var resp = "";
+        setInterval(function () {
+        const reqResp = new XMLHttpRequest();
+        reqResp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                const novaResp = reqResp.responseText; // Obtém a nova resposta do servidor
+                const data = JSON.parse(novaResp.toString());
+                // Verifica se a resposta é diferente da anterior
+                if (novaResp !== resp) {
+                     document.getElementById("temperatura").innerHTML = parseInt(data.t)+"ºC";
+                     document.getElementById("umidade").innerHTML = parseInt(data.u)+"%";
+                     document.getElementById("pdo").innerHTML = parseInt(data.p)+"ºC";
+
+            
+                     document.getElementById("CirculoDaTemperaturaDois").style.strokeDashoffset = (parseInt(data.t*440)/80)-440+"px";
+                     document.getElementById("CirculoDaPDODois").style.strokeDashoffset = (parseInt(data.p*440)/80)-440+"px";
+                     document.getElementById("CirculoDaUmidadeDois").style.strokeDashoffset = (parseInt((data.u )*440)/100)-440+"px";
+                }
+            }
+        };
+        reqResp.open('GET', '/get_dados/', true);
+        reqResp.send();
+    }, 1000);
+
+
+
+var respDois = "";
+        setInterval(function () {
+        const reqRespDois = new XMLHttpRequest();
+        reqRespDois.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                const novaRespDois = reqRespDois.responseText; // Obtém a nova resposta do servidor
+                const dataDois = JSON.parse(novaRespDois.toString());
+                // Verifica se a resposta é diferente da anterior
+                if (novaRespDois !== respDois) {
+                     document.getElementById("temperaturaDois").innerHTML = parseInt(dataDois.t)+"ºC";
+                     document.getElementById("umidadeDois").innerHTML = parseInt(dataDois.u)+"%";
+                     document.getElementById("pdoDois").innerHTML = parseInt(dataDois.p)+"ºC";
+
+            
+                     document.getElementById("CirculoDaTemperaturaDoisDois").style.strokeDashoffset = (parseInt(dataDois.t*440)/80)-440+"px";
+                     document.getElementById("CirculoDaPDODoisDois").style.strokeDashoffset = (parseInt(dataDois.p*440)/80)-440+"px";
+                     document.getElementById("CirculoDaUmidadeDoisDois").style.strokeDashoffset = (parseInt((dataDois.u )*440)/100)-440+"px";
+                }
+            }
+        };
+        reqRespDois.open('GET', '/get_dados_dois/', true);
+        reqRespDois.send();
+    }, 1000);
+   </script>
+  </body>
+</html>
+  </body>
+</html>

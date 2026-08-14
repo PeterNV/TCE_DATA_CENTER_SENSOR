@@ -1,0 +1,285 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="icon" href="{% static 'TCE_DATA_CENTER_LOGO_ICON.jpg'%}" sizes="42x42" type="image/png">
+        <title>TCE DATA CENTER</title>
+<style>
+     :root{
+    --bg: #0b1220;
+    --card: #ffffff;
+    --muted: #9aa4b2;
+    --accent: #2dd4bf;
+    --panel: #f4f6f8;
+    --text-dark: #0b1724;
+    --max-width: 1200px;
+  }
+    *{box-sizing:border-box}
+     body{
+        
+        margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;color:#111;background:linear-gradient(180deg,#071124 0%, #0f1724 60%);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;padding:18px;
+        background-image: url("{% static 'BackgroundTCE.jpg'%}");  
+      }
+
+      #ErroData{
+              max-width: 920px;
+              margin: 28px auto;
+              display:flex;
+              flex-direction:column;
+              align-items:center;
+              justify-content:flex-start;
+              gap:18px;
+              text-align:center;
+              background: linear-gradient(180deg, #f7f7f8, #ededee);
+              border: 2px solid rgba(139,139,139,0.9);
+              border-radius: 14px;
+              padding: 24px;
+              box-shadow: 0 10px 30px rgba(2,6,23,0.25);
+  }
+
+  /* ícone circular grande (X) */
+  #Circulo{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:96px;
+    height:96px;
+    border-radius:50%;
+    background: linear-gradient(180deg,#ff6b6b,#e63946);
+    color:#fff;
+    font-weight:800;
+    font-size:36px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  }
+  #x{ margin:0; padding:0; color:#fff; font-weight:900; font-size:34px; }
+
+  #ErroMSG{
+    color:#222;
+    font-weight:700;
+    line-height:1.3;
+    margin:0 8px;
+    font-size:clamp(15px,1.7vw,18px);
+  }
+
+  #ErroData a{
+    display:inline-block;
+    margin-top:6px;
+    padding:10px 16px;
+    border-radius:10px;
+    background:#0b1724;
+    color:#ffffff;
+    text-decoration:none;
+    font-weight:700;
+    box-shadow: 0 6px 14px rgba(11,23,36,0.4);
+  }
+
+  /* ----- Container de gráficos (DadosAab) ----- */
+  #DadosAab{
+    max-width: var(--max-width);
+    margin: 18px auto;
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+    justify-content:center;
+    align-items:flex-start;
+    padding:12px;
+  }
+
+  #AEVMEDS{
+    width:100%;
+    text-align:center;
+    color: #e6eef6;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    margin: 6px 0 14px;
+    font-weight:800;
+    font-size: clamp(18px, 2.6vw, 22px);
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+
+  #VoltarBotao{
+    background:transparent;
+    border:0;
+    color: var(--accent);
+    text-decoration:underline;
+    font-weight:800;
+    cursor:pointer;
+    margin-left:8px;
+  }
+
+  /* cada gráfico - responsivo */
+  .data-container{
+    flex: 1 1 260px; /* cresce, encolhe; largura mínima 260px */
+    max-width: 420px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    padding:12px;
+    border-radius:12px;
+    box-shadow: 0 8px 22px rgba(2,6,23,0.28);
+    min-width:220px;
+  }
+
+  .data-container h2{
+    margin:0;
+    font-size:clamp(14px,2.2vw,18px);
+    color: green;
+    font-weight:800;
+    text-align:center;
+  }
+
+  /* Imagens dos gráficos adaptáveis */
+  .data-container img{
+    width:100%;
+    height:auto;
+    border-radius:8px;
+    border:1px solid rgba(255,255,255,0.03);
+    background: #fff;
+  }
+
+  /* grid quando houver muitos gráficos - centralizado */
+  @media (min-width:1100px){
+    #DadosAab{ justify-content:flex-start; }
+  }
+
+  /* ----- Cartão Valores Médios ----- */
+  #ValoresMedios{
+    max-width: var(--max-width);
+    margin: 18px auto;
+    background: #ffffff;
+    color: #0b1724;
+    padding:18px 20px;
+    border-radius:12px;
+    border:1px solid rgba(180,180,180,0.8);
+    box-shadow: 0 10px 30px rgba(2,6,23,0.12);
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .Vm{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    font-weight:700;
+    color:#222;
+    font-size:clamp(13px,1.4vw,16px);
+  }
+
+  /* ícones pequenos coloridos (são imagens no template; estilizamos por ID) */
+  #TempIcon, #UmidIcon, #PDOIcon, #VelVIcon, #RpmIcon, #LuzIcon, #GasIcon, #ArIcon {
+    display:inline-block;
+    width:14px;
+    height:14px;
+    border-radius:3px;
+    margin-right:8px;
+    vertical-align:middle;
+  }
+
+  /* mantive suas cores originais, agora com borda sutil */
+  #TempIcon{ background:#e63946; border:1px solid rgba(0,0,0,0.06) }
+  #UmidIcon{ background:#3b82f6; border:1px solid rgba(0,0,0,0.06) }
+  #PDOIcon{ background:#7c3aed; border:1px solid rgba(0,0,0,0.06) }
+ 
+
+  /* responsividade: valores médios em colunas quando largo */
+  @media (min-width:900px){
+    #ValoresMedios{ display:grid; grid-template-columns: repeat(2, 1fr); gap:18px; align-items:start }
+    .Vm{ padding:6px 0; }
+  }
+
+  /* mobile tweaks */
+  @media (max-width:520px){
+    body{padding:12px}
+    #ErroData{ padding:18px; margin:16px 8px; }
+    #DadosAab{ gap:12px; padding:8px; }
+    .data-container{ min-width:100%; max-width:100%; padding:10px }
+    #AEVMEDS{ font-size:16px; text-align:center; gap:8px; }
+    #ValoresMedios{ padding:12px; margin:12px 8px; }
+  }
+
+  /* pequenos ajustes estéticos */
+  a { color: var(--accent); }
+  label, h1, h2, h3 { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial; }
+</style>
+    </head>
+    <body>
+        {% if DataInvalida == True and DataValida == False %}
+    <div id="ErroData">
+        <br>
+      <label id="Circulo"><label id="x">X</label></label><br><br>
+              
+      <h1 id="ErroMSG">ERRO! A DATA QUE VOCÊ DIGITOU NÃO FOI ENCONTRADA, POR FAVOR TENTE COM UMA DATA DIFERENTE.<br> 
+        <form method="post" action="/">
+             {% csrf_token %}
+            <a href="/">VOLTAR</a>
+        </form>
+        </h1>
+    </div>
+    {% endif %}
+    
+    {% if DataInvalida == False and DataValida == True %}
+    <br>
+    <div id="DadosAab" class="container"> 
+      <h1 id="AEVMEDS">ABAIXO ESTÃO OS DADOS DA ESTAÇÃO NA DATA (RL) {{ datacompleta }}. 
+    
+         {% csrf_token %}
+            <a href="{% url 'home' %}" id="VoltarBotao">VOLTAR</a>
+       
+    </h1><br>
+      <br>
+      <br>
+
+      <div class="data-container">
+        <h2>Temperatura</h2>
+        <img src="data:image/png;base64,{{ img_t }}" alt="Meu Gráfico">
+    </div>
+
+     <div class="data-container">
+        <h2>Umidade</h2>
+
+        <img src="data:image/png;base64,{{ img_u }}" alt="Gráfico de umidade">
+
+    </div>
+<div class="data-container">
+        <h2>Ponto de orvalho</h2>
+
+        <img src="data:image/png;base64,{{ img_p }}" alt="Gráfico de ponto de orvalho">
+
+    </div>
+    
+
+  </div><br>
+  <div id="ValoresMedios">
+    <br>
+    <label class="Vm"><img id="TempIcon"> TEMPERATURA: {{tempMed}} ºC. (MIN: {{tempMin}} ºC & MAX: {{tempMax}} ºC)</label><br><br>
+    <label class="Vm"><img id="UmidIcon"> UMIDADE: {{umidMed}} %. (MIN: {{humMin}} % & MAX: {{humMax}} %)</label><br><br>
+    <label class="Vm"><img id="PDOIcon"> PONTO DE ORVALHO: {{pdoMed}} ºC. (MIN: {{pdoMin}} ºC & MAX: {{pdoMax}} ºC)</label>
+
+        <label class="Vm"><img id="TempIcon"> HOUVE DEZ OU MAIS OCORRÊNCIAS DE TEMPERATURA ALTA? <br> (T > 27.00ºC E T < 32.99ºC)  {{RespTempAlta}}. TOTAL: {{TotalTempAlta}}</label><br><br>
+    <label class="Vm"><img id="TempIcon"> HOUVE DEZ OU MAIS OCORRÊNCIAS DE TEMPERATURA BAIXA? <br> (T > 15.00ºC E T < 18.00ºC)  {{RespTempBaixa}}. TOTAL: {{TotalTempBaixa}}</label><br><br>
+
+    <label class="Vm"><img id="UmidIcon"> HOUVE DEZ OU MAIS OCORRÊNCIAS DE UMIDADE ALTA? <br> (U > 55.00% E U < 60.99%)  {{RespUmidAlta}}. TOTAL: {{TotalUmidAlta}}</label><br><br>
+    <label class="Vm"><img id="UmidIcon"> HOUVE DEZ OU MAIS OCORRÊNCIAS DE UMIDADE BAIXA? <br> (U > 20.00% E U < 40.00%)  {{RespUmidBaixa}}. TOTAL: {{TotalUmidBaixa}}</label>
+  </div>
+  {% endif %}
+    </body>
+
+</html>
+
+
+
+
+
+
