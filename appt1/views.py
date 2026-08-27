@@ -149,7 +149,7 @@ def home(request):
                                  'IndexDois': saveIndexDois
                              }
     elif mycol.find_one() != None and mycolDois.find_one() != None:
-        for y,x in mycolDois.distinct("Data"), x in mycol.distinct("Data"):
+        for y,x in mycolDois.distinct("Data"), mycol.distinct("Data"):
              print(str(y))
              allIndexDois += 1
              print(allIndexDois)
