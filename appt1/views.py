@@ -149,16 +149,13 @@ def home(request):
                                  'IndexDois': saveIndexDois
                              }
     elif mycol.find_one() != None and mycolDois.find_one() != None:
-        for y,x in mycolDois.distinct("Data"), mycol.distinct("Data"):
-             print(str(y))
-             allIndexDois += 1
-             print(allIndexDois)
-             allDataDois.append(str(y))
-             saveIndexDois.append(allIndexDois)
+        for y in mycolDois.distinct("Data"):
+            allIndexDois += 1
+            allDataDois.append(str(y))
+            saveIndexDois.append(allIndexDois)
 
-             print(str(x))
+        for x in mycol.distinct("Data"):
              allIndex += 1
-             print(allIndex)
              allData.append(str(x))
              saveIndex.append(allIndex)
         
