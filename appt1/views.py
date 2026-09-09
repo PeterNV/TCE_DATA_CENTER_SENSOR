@@ -237,7 +237,7 @@ def retornaGraficos(request):
               VerificaTempBaixa += 1
         if float(x.get("Umidade")) > 55.00 and float(x.get("Umidade")) < 60.99:
               VerificaUmidAlta += 1
-        if float(x.get("Umidade")) > 20.00 and float(x.get("Umidade")) < 40.00:
+        if float(x.get("Umidade")) > 20.00 and float(x.get("Umidade")) < 25.00:
               VerificaUmidBaixa += 1
         
         print(x)
@@ -391,7 +391,7 @@ def retornaGraficosDois(request):
                       VerificaTempBaixa += 1
         if float(x.get("Umidade")) > 55.00 and float(x.get("Umidade")) < 60.99:
                       VerificaUmidAlta += 1
-        if float(x.get("Umidade")) > 20.00 and float(x.get("Umidade")) < 40.00:
+        if float(x.get("Umidade")) > 20.00 and float(x.get("Umidade")) < 25.00:
                       VerificaUmidBaixa += 1
         print(x)
     print("{:.2f}".format(float(tm/i)))
