@@ -205,7 +205,7 @@
               background-image: -webkit-linear-gradient(-45deg,white,snow);
               border: 5px solid white;
             
-              opacity: 0.5;
+           
               color: gray;
               font-weight: bold;
             }
@@ -217,7 +217,7 @@
               background-image: -webkit-linear-gradient(-45deg,white,snow);
               border: 5px solid white;
               
-              opacity: 0.5;
+           
               color: gray;
               font-weight: bold;
             }
@@ -562,6 +562,12 @@
         width: 200px;
         
       }
+      .IndicadorLabel2{
+        font-weight: bold;
+        color: white;
+        font-size: 20px;
+        width: 275px;
+      }
     </style>
   </head>
   <body >
@@ -677,13 +683,14 @@
           {% csrf_token %}
           <h1 id="SUDPVVM"><button id="CanceData" type="reset" onclick="CancelaData()">X</button> SELECIONE UMA DATA (NC): </h1><br>
           <h5 class="RelatoTitle">RELATÓRIO DIÁRIO:</h5>
-            <select name="datadados" id="SlecData"   >
+          <label class="IndicadorLabel2">SELECIONE UMA DATA:</label><br>
+            <select name="datadados" id="SlecData"  >
               
             
               {%if Data == "Dados não encontrados"%}
               <option class="datas" id="DatasCompleta">{{Data}}</option>
               {% else %}
-              <option class="datas">SELECIONE UMA DATA</option>
+             
               {% for x in Data %}
               
               <option class="datas" id="DatasCompleta">{{x}}</option>
@@ -693,7 +700,7 @@
             </select><br><br>
             <input id="TheDataInput"  type="text" onkeypress="DataInput()" onkeyup="DataInput()" onkeydown="DataInput()" placeholder="DD/MM/AAAA"><br><br>
             
-           <button id="ConfData" type="submit" disabled onclick="FechaData()">CONFIRMAR</button><br><br>
+           <button id="ConfData" type="submit"  onclick="FechaData()">CONFIRMAR</button><br><br>
           </fieldset>
         </form><br>
         <form action="{% url 'dados_estacao_tres' %}" id="RelatorioMensal" method="get">
@@ -735,12 +742,13 @@
           {% csrf_token %}
           <h1 id="SUDPVVM"><button id="CanceData" type="reset" onclick="CancelaDataDois()">X</button> SELECIONE UMA DATA (RL): </h1><br>
             <h5 class="RelatoTitle">RELATÓRIO DIÁRIO:</h5>
+            <label class="IndicadorLabel2">SELECIONE UMA DATA:</label><br>
             <select name="datadadosDois" id="SlecDataDois">
               
               {%if DataDois == "Dados não encontrados"%}
               <option class="datasDois" id="DatasCompletaDois">{{DataDois}}</option>
               {% else %}
-              <option class="datasDois">SELECIONE UMA DATA</option>
+              
               {% for x in DataDois %}
               
               <option class="datasDois" id="DatasCompletaDois">{{x}}</option>
@@ -751,7 +759,7 @@
             
             <input id="TheDataInputDois"  type="text" onkeypress="DataInputDois()" onkeyup="DataInputDois()" onkeydown="DataInputDois()" placeholder="DD/MM/AAAA"><br>
             <br>
-           <button id="ConfDataDois" type="submit" disabled onclick="FechaDataDois()">CONFIRMAR</button><br><br>
+           <button id="ConfDataDois" type="submit" onclick="FechaDataDois()">CONFIRMAR</button><br><br>
           </fieldset>
         </form><br>
         <form action="{% url 'dados_estacao_quatro' %}" id="RelatorioMensal2" method="get">
@@ -911,26 +919,7 @@ window.addEventListener("pageshow", function(event) {
       document.getElementById("TheDataInput").value = null;
     }
    
-    var selc = false;
-    for(var i = 0; i < seleData.length;i++){
-      
-      if(re == seleData[i].innerHTML ){
-        console.log("Data encontrada.");
-        seleData[i].selected = true;
-        seleData[0].selected = false;
-      }
-      if(re == ""){
-        seleData[0].selected = true;
-      }
-      if(seleData[0].selected == true){
-        document.getElementById("ConfData").disabled = true;
-          document.getElementById("ConfData").style.opacity = "0.5";
-          
-      }else{
-        document.getElementById("ConfData").disabled = false;
-          document.getElementById("ConfData").style.opacity = "1";
-      }
-    }
+    
    } 
 
 
@@ -1000,26 +989,7 @@ window.addEventListener("pageshow", function(event) {
     const datah = new Date();
     var now = datah.getDate()+"/"+parseInt(datah.getMonth()+1)+"/"+datah.getFullYear();
    
-    var selc = false;
-    for(var i = 0; i < seleData.length;i++){
-      
-      if(re == seleData[i].innerHTML ){
-        console.log("Data encontrada.");
-        seleData[i].selected = true;
-        seleData[0].selected = false;
-      }
-      if(re == ""){
-        seleData[0].selected = true;
-      }
-      if(seleData[0].selected == true){
-        document.getElementById("ConfDataDois").disabled = true;
-          document.getElementById("ConfDataDois").style.opacity = "0.5";
-          
-      }else{
-        document.getElementById("ConfDataDois").disabled = false;
-          document.getElementById("ConfDataDois").style.opacity = "1";
-      }
-    }
+    
    }
   
 
